@@ -10,4 +10,6 @@ public class EventProcessor {
         e.Process();
         log.add(e);
     }
+
+    public int NumberOfEvents() { return log.size(); }
 }
