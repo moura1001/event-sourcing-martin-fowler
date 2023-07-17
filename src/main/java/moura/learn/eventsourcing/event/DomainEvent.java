@@ -6,13 +6,13 @@ import moura.learn.eventsourcing.domain.Ship;
 import java.util.Date;
 
 abstract class DomainEvent {
-    protected Date occured;
+    protected Date occurred;
     protected Date recorded;
     protected Port port;
     protected Ship ship;
 
-    protected DomainEvent(Date occured) {
-        this.occured = occured;
+    protected DomainEvent(Date occurred) {
+        this.occurred = occurred;
         this.recorded = new Date();
     }
 

@@ -6,8 +6,8 @@ import moura.learn.eventsourcing.domain.Ship;
 import java.util.Date;
 
 public class DepartureEvent extends DomainEvent {
-    public DepartureEvent(Date occured, Port port, Ship ship) {
-        super(occured);
+    public DepartureEvent(Date occurred, Port port, Ship ship) {
+        super(occurred);
         super.port = port;
         super.ship = ship;
     }

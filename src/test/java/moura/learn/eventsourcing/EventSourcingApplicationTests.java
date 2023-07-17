@@ -4,9 +4,7 @@ import moura.learn.eventsourcing.domain.Cargo;
 import moura.learn.eventsourcing.domain.Country;
 import moura.learn.eventsourcing.domain.Port;
 import moura.learn.eventsourcing.domain.Ship;
-import moura.learn.eventsourcing.event.ArrivalEvent;
-import moura.learn.eventsourcing.event.DepartureEvent;
-import moura.learn.eventsourcing.event.EventProcessor;
+import moura.learn.eventsourcing.event.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,5 +47,18 @@ class EventSourcingApplicationTests {
 		assertThat(eProc.NumberOfEvents()).isEqualTo(3);
         assertThat(kr.GetPort()).isEqualTo(Port.AT_SEA);
     }
+
+	@Test
+	void VisitingCanadaMarksCargo() {
+		eProc.Process(new LoadEvent(new Date(2005, 11, 1), refact, kr));
+		eProc.Process(new ArrivalEvent(new Date(2005,11,2), yyv, kr));
+		eProc.Process(new DepartureEvent(new Date(2005,11,3), yyv, kr));
+		eProc.Process(new ArrivalEvent(new Date(2005,11,4), sfo, kr));
+		assertThat(kr.LoadQuantity()).isEqualTo(1);
+		eProc.Process(new UnloadEvent(new Date(2005,11,5), refact, kr));
+		assertThat(kr.LoadQuantity()).isEqualTo(0);
+		assertThat(eProc.NumberOfEvents()).isEqualTo(5);
+		assertThat(refact.HasBeenInCanada()).isTrue();
+	}
 
 }

@@ -9,4 +9,6 @@ public class Port {
         this.name = name;
         this.country = country;
     }
+
+    public Country GetCountry() { return country; }
 }
