@@ -23,4 +23,8 @@ abstract class DomainEvent {
     public Ship GetShip() {
         return ship;
     }
+
+    public Date GetOccurred() {
+        return occurred;
+    }
 }

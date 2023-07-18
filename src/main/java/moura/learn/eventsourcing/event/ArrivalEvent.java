@@ -15,5 +15,6 @@ public class ArrivalEvent extends DomainEvent {
     @Override
     public void Process() {
         super.ship.HandleArrival(this);
+        super.port.HandleArrival(this);
     }
 }

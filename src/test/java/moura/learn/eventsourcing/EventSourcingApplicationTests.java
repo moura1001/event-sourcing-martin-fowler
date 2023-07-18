@@ -5,6 +5,7 @@ import moura.learn.eventsourcing.domain.Country;
 import moura.learn.eventsourcing.domain.Port;
 import moura.learn.eventsourcing.domain.Ship;
 import moura.learn.eventsourcing.event.*;
+import moura.learn.eventsourcing.service.Registry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,6 +60,18 @@ class EventSourcingApplicationTests {
 		assertThat(kr.LoadQuantity()).isEqualTo(0);
 		assertThat(eProc.NumberOfEvents()).isEqualTo(5);
 		assertThat(refact.HasBeenInCanada()).isTrue();
+	}
+
+	@Test
+	void OnArrivalSendsNotification() {
+		Registry registry = new Registry(new MockCustomEventGateway());
+		//Registry registry = new Registry(new CustomEventGateway(eProc));
+		Port port = new Port("Test", Country.US, registry);
+		ArrivalEvent ev = new ArrivalEvent(new Date(2005-1900,11,1), port, kr);
+		eProc.Process(ev);
+		assertThat(eProc.NumberOfEvents()).isEqualTo(1);
+		assertThat(kr.GetPort()).isEqualTo(port);
+		assertThat(((MockCustomEventGateway) registry.GetCustomNotificationGateway()).isNotified()).isTrue();
 	}
 
 }

@@ -18,6 +18,8 @@ public class Ship {
         this.port = null;
     }
 
+    public String GetName() { return this.name; }
+
     public Port GetPort() { return this.port; }
 
     public int LoadQuantity() { return cargo.size(); }
