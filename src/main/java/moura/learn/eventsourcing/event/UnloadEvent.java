@@ -16,8 +16,11 @@ public class UnloadEvent extends DomainEvent {
 
     @Override
     public void Process() {
-        super.ship.HandleUnload(this);
+        this.cargo.HandleUnload(this);
     }
+
+    @Override
+    public void Reverse() {}
 
     public Cargo GetCargo() { return this.cargo; }
 }

@@ -74,4 +74,26 @@ class EventSourcingApplicationTests {
 		assertThat(((MockCustomEventGateway) registry.GetCustomNotificationGateway()).isNotified()).isTrue();
 	}
 
+	@Test
+	void ReversingTheLoadEventLeavesTheShipEmpty() {
+		Ship oi = new Ship("Old Ironsides");
+		eProc.Process(new ArrivalEvent(new Date(2005,11,1), sfo, oi));
+		eProc.Process(new LoadEvent(new Date(2005, 11, 1), refact, oi));
+		eProc.Process(new DepartureEvent(new Date(2005,11,2), sfo, oi));
+		eProc.Process(new ArrivalEvent(new Date(2005,11,3), la, oi));
+		eProc.Process(new UnloadEvent(new Date(2005, 11, 3), refact, oi));
+		assertThat(oi.LoadQuantity()).isEqualTo(0);
+
+		LoadEvent ev = new LoadEvent(new Date(2005, 11, 4), refact, kr);
+		eProc.Process(ev);
+		assertThat(eProc.NumberOfEvents()).isEqualTo(6);
+		assertThat(kr.LoadQuantity()).isEqualTo(1);
+		assertThat(refact.GetShip()).isEqualTo(kr);
+		assertThat(refact.GetPort()).isNull();
+		ev.Reverse();
+		assertThat(kr.LoadQuantity()).isEqualTo(0);
+		assertThat(refact.GetShip()).isNull();
+		assertThat(refact.GetPort()).isEqualTo(la);
+	}
+
 }

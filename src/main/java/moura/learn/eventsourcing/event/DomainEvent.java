@@ -18,6 +18,8 @@ abstract class DomainEvent {
 
     public abstract void Process();
 
+    public abstract void Reverse();
+
     public Port GetPort() { return port; }
 
     public Ship GetShip() {

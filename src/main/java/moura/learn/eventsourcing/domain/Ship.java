@@ -30,6 +30,7 @@ public class Ship {
 
     public void HandleArrival(ArrivalEvent ev) {
         this.port = ev.GetPort();
+        this.port.HandleArrival(ev);
         for (Cargo c: this.cargo) {
             c.HandleArrival(ev);
         }
@@ -38,4 +39,6 @@ public class Ship {
     public void HandleLoad(LoadEvent ev) { this.cargo.add(ev.GetCargo()); }
 
     public void HandleUnload(UnloadEvent ev) { this.cargo.removeIf(c -> (c == ev.GetCargo())); }
+
+    public void ReverseLoad(LoadEvent ev) { this.cargo.remove(ev.GetCargo()); }
 }

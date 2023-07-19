@@ -16,4 +16,7 @@ public class DepartureEvent extends DomainEvent {
     public void Process() {
         super.ship.HandleDeparture(this);
     }
+
+    @Override
+    public void Reverse() {}
 }
