@@ -9,8 +9,6 @@ import java.util.Date;
 public class LoadEvent extends DomainEvent {
     private Cargo cargo;
 
-    private Port priorPort;
-
     public LoadEvent(Date occurred, Cargo cargo, Ship ship) {
         super(occurred);
         super.ship = ship;
@@ -24,8 +22,4 @@ public class LoadEvent extends DomainEvent {
     public void Reverse() { this.cargo.ReverseLoad(this); }
 
     public Cargo GetCargo() { return this.cargo; }
-
-    public Port GetPriorPort() { return this.priorPort; }
-
-    public void SetPriorPort(Port port) { this.priorPort = port; }
 }

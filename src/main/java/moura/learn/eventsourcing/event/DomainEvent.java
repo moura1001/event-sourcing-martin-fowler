@@ -10,6 +10,7 @@ abstract class DomainEvent {
     protected Date recorded;
     protected Port port;
     protected Ship ship;
+    protected Port priorPort;
 
     protected DomainEvent(Date occurred) {
         this.occurred = occurred;
@@ -29,4 +30,8 @@ abstract class DomainEvent {
     public Date GetOccurred() {
         return occurred;
     }
+
+    public Port GetPriorPort() { return priorPort; }
+
+    public void SetPriorPort(Port port) { priorPort = port; }
 }

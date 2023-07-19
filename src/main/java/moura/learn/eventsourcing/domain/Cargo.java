@@ -23,8 +23,13 @@ public class Cargo {
     public boolean HasBeenInCanada() { return hasBeenInCanada; }
 
     public void HandleArrival(ArrivalEvent ev) {
+        ev.SetPriorCargoInCanada(this, this.hasBeenInCanada);
         if (Country.CANADA == ev.GetPort().GetCountry())
             hasBeenInCanada = true;
+    }
+
+    public void ReverseArrival(ArrivalEvent ev) {
+        hasBeenInCanada = ev.PriorCargoInCanada(this);
     }
 
     public void HandleLoad(LoadEvent ev) {

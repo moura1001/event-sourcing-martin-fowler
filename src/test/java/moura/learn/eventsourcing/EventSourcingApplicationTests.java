@@ -96,4 +96,36 @@ class EventSourcingApplicationTests {
 		assertThat(refact.GetPort()).isEqualTo(la);
 	}
 
+	@Test
+	void RevertsArrivalInCanada() {
+		Cargo cargo = new Cargo("Test");
+
+		eProc.Process(new ArrivalEvent(new Date(2005,11,1), sfo, kr));
+		eProc.Process(new LoadEvent(new Date(2005, 11, 1), refact, kr));
+		eProc.Process(new LoadEvent(new Date(2005, 11, 1), cargo, kr));
+		eProc.Process(new DepartureEvent(new Date(2005,11,2), sfo, kr));
+		assertThat(kr.LoadQuantity()).isEqualTo(2);
+
+		ArrivalEvent ev = new ArrivalEvent(new Date(2005, 11, 3), yyv, kr);
+		eProc.Process(ev);
+		assertThat(kr.GetPort()).isEqualTo(yyv);
+		assertThat(refact.GetShip()).isEqualTo(kr);
+		assertThat(refact.GetPort()).isNull();
+		assertThat(refact.HasBeenInCanada()).isTrue();
+		assertThat(cargo.GetShip()).isEqualTo(kr);
+		assertThat(cargo.GetPort()).isNull();
+		assertThat(cargo.HasBeenInCanada()).isTrue();
+
+		ev.Reverse();
+		assertThat(kr.GetPort()).isEqualTo(Port.AT_SEA);
+		assertThat(refact.GetShip()).isEqualTo(kr);
+		assertThat(refact.GetPort()).isNull();
+		assertThat(refact.HasBeenInCanada()).isFalse();
+		assertThat(cargo.GetShip()).isEqualTo(kr);
+		assertThat(cargo.GetPort()).isNull();
+		assertThat(cargo.HasBeenInCanada()).isFalse();
+
+		assertThat(kr.LoadQuantity()).isEqualTo(2);
+	}
+
 }
