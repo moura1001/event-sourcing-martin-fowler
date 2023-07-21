@@ -29,4 +29,17 @@ public class Port {
         if (this.registry != null)
             this.registry.GetCustomNotificationGateway().Notify(ev.GetOccurred(), ev.GetShip(), ev.GetPort());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Port)) return false;
+        Port port = (Port) o;
+        return name.equals(port.name) && country == port.country;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, country);
+    }
 }

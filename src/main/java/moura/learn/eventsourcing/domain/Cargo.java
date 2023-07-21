@@ -4,6 +4,8 @@ import moura.learn.eventsourcing.event.ArrivalEvent;
 import moura.learn.eventsourcing.event.LoadEvent;
 import moura.learn.eventsourcing.event.UnloadEvent;
 
+import java.util.Objects;
+
 public class Cargo {
     private String name;
     private Ship ship;
@@ -49,5 +51,18 @@ public class Cargo {
         this.port = ev.GetShip().GetPort();
         this.ship.HandleUnload(ev);
         this.ship = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cargo)) return false;
+        Cargo cargo = (Cargo) o;
+        return hasBeenInCanada == cargo.hasBeenInCanada && name.equals(cargo.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, hasBeenInCanada);
     }
 }

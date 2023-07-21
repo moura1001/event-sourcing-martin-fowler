@@ -1,7 +1,6 @@
 package moura.learn.eventsourcing.event;
 
 import moura.learn.eventsourcing.domain.Cargo;
-import moura.learn.eventsourcing.domain.Port;
 import moura.learn.eventsourcing.domain.Ship;
 
 import java.util.Date;

@@ -43,9 +43,10 @@ class EventSourcingApplicationTests {
     @Test
     void DeparturePutsShipsOutToSea() {
         eProc.Process(new ArrivalEvent(new Date(2005,10,1), la, kr));
+        eProc.Process(new DepartureEvent(new Date(2005,10,8), la, kr));
         eProc.Process(new ArrivalEvent(new Date(2005,11,1), sfo, kr));
-        eProc.Process(new DepartureEvent(new Date(2005,10,1), sfo, kr));
-		assertThat(eProc.NumberOfEvents()).isEqualTo(3);
+        eProc.Process(new DepartureEvent(new Date(2005,11,5), sfo, kr));
+		assertThat(eProc.NumberOfEvents()).isEqualTo(4);
         assertThat(kr.GetPort()).isEqualTo(Port.AT_SEA);
     }
 
@@ -127,5 +128,21 @@ class EventSourcingApplicationTests {
 
 		assertThat(kr.LoadQuantity()).isEqualTo(2);
 	}
+
+    @Test
+    void IgnoresInconsistentArrivalAndDepartureEventsFromTheSameShip() {
+        eProc.Process(new ArrivalEvent(new Date(2005,10,1), la, kr));
+        eProc.Process(new ArrivalEvent(new Date(2005,11,1), sfo, kr));
+		assertThat(kr.GetPort()).isEqualTo(la);
+
+		eProc.Process(new DepartureEvent(new Date(2005,11,8), sfo, kr));
+        eProc.Process(new DepartureEvent(new Date(2005,9,1), la, kr));
+        assertThat(eProc.NumberOfEvents()).isEqualTo(1);
+        assertThat(kr.GetPort()).isEqualTo(la);
+
+		eProc.Process(new DepartureEvent(new Date(2005,11,8), la, kr));
+        assertThat(eProc.NumberOfEvents()).isEqualTo(2);
+        assertThat(kr.GetPort()).isEqualTo(Port.AT_SEA);
+    }
 
 }
